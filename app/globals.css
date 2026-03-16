@@ -8,8 +8,8 @@
   --panel: rgba(255, 252, 245, 0.82);
   --panel-strong: rgba(255, 250, 240, 0.96);
   --border: rgba(29, 77, 59, 0.12);
-  --font-body: "Avenir Next", "Segoe UI", sans-serif;
-  --font-display: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", serif;
+  --font-body-en: "Avenir Next", "Segoe UI", sans-serif;
+  --font-display-en: "Iowan Old Style", "Palatino Linotype", "Book Antiqua", serif;
 }
 
 * {
@@ -27,10 +27,14 @@ body {
   min-height: 100vh;
   margin: 0;
   color: var(--foreground);
-  font-family: var(--font-body);
+  font-family: var(--font-body-en);
   background:
     radial-gradient(circle at 20% 10%, rgba(94, 127, 84, 0.14), transparent 24%),
     radial-gradient(circle at 80% 0%, rgba(233, 141, 91, 0.18), transparent 28%);
+}
+
+html:lang(ko) body {
+  font-family: var(--font-body-ko), var(--font-body-en);
 }
 
 a {
@@ -75,7 +79,12 @@ textarea {
 }
 
 .display-font {
-  font-family: var(--font-display);
+  font-family: var(--font-display-en);
+}
+
+html:lang(ko) .display-font {
+  font-family: var(--font-display-ko), var(--font-display-en);
+  letter-spacing: -0.02em;
 }
 
 .safe-bottom {
