@@ -99,6 +99,9 @@ export default function GroupDetailModal({
 
   const groupId = group.id;
   const groupLocation = group.location;
+  const isKoreanLabels = /[가-힣]/.test(copy.menuLabel) || /[가-힣]/.test(copy.locationLabel);
+  const detailLabelWidthClass = isKoreanLabels ? "w-16" : "w-24";
+  const detailRowGapClass = isKoreanLabels ? "gap-2" : "gap-3";
   const isCurrentGroup = membershipGroupId === groupId;
   const hasMembership = Boolean(membershipGroupId);
   const primaryLabel = isCurrentGroup
@@ -146,14 +149,18 @@ export default function GroupDetailModal({
     >
       <div className="space-y-5">
         <div className="rounded-[1.5rem] bg-gradient-to-br from-pine to-moss p-5 text-white">
-          <p className="mt-1 flex items-baseline gap-3 text-2xl font-semibold">
-            <span className="inline-block w-24 shrink-0 text-sm font-semibold uppercase tracking-[0.22em] text-white/75">
+          <p className={`mt-1 flex items-baseline text-2xl font-semibold ${detailRowGapClass}`}>
+            <span
+              className={`inline-block shrink-0 text-sm font-semibold uppercase tracking-[0.22em] text-white/75 ${detailLabelWidthClass}`}
+            >
               {copy.menuLabel}
             </span>
             <span className="min-w-0 flex-1">{group.menu}</span>
           </p>
-          <p className="mt-3 flex items-baseline gap-3 text-base text-white/90">
-            <span className="inline-block w-24 shrink-0 text-sm font-semibold uppercase tracking-[0.22em] text-white/75">
+          <p className={`mt-3 flex items-baseline text-base text-white/90 ${detailRowGapClass}`}>
+            <span
+              className={`inline-block shrink-0 text-sm font-semibold uppercase tracking-[0.22em] text-white/75 ${detailLabelWidthClass}`}
+            >
               {copy.locationLabel}
             </span>
             <span className="min-w-0 flex-1">{group.location || locationFallback}</span>
