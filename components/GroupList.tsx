@@ -77,6 +77,10 @@ export default function GroupList({
   deletingGroupId,
   copy
 }: GroupListProps) {
+  const isKoreanLabels = /[가-힣]/.test(copy.menu) || /[가-힣]/.test(copy.location);
+  const labelWidthClass = isKoreanLabels ? "w-16" : "w-24";
+  const rowGapClass = isKoreanLabels ? "gap-2" : "gap-3";
+
   function formatMemberCount(memberCount: number) {
     if (copy.memberCountPrefix) {
       return `${copy.memberCountPrefix} ${memberCount}`;
@@ -119,15 +123,19 @@ export default function GroupList({
                 {group.name || copy.fallbackName}
               </h3>
 
-              <p className="mt-2 flex items-baseline gap-3 text-base">
-                <span className="inline-block w-24 shrink-0 text-sm font-semibold uppercase tracking-[0.16em] text-slate-500">
+              <p className={`mt-2 flex items-baseline text-base ${rowGapClass}`}>
+                <span
+                  className={`inline-block shrink-0 text-sm font-semibold uppercase tracking-[0.16em] text-slate-500 ${labelWidthClass}`}
+                >
                   {copy.menu}
                 </span>
                 <span className="min-w-0 flex-1 font-medium text-slate-800">{group.menu}</span>
               </p>
               {group.location ? (
-                <p className="mt-1 flex items-baseline gap-3 text-base">
-                  <span className="inline-block w-24 shrink-0 text-sm font-semibold uppercase tracking-[0.16em] text-slate-500">
+                <p className={`mt-1 flex items-baseline text-base ${rowGapClass}`}>
+                  <span
+                    className={`inline-block shrink-0 text-sm font-semibold uppercase tracking-[0.16em] text-slate-500 ${labelWidthClass}`}
+                  >
                     {copy.location}
                   </span>
                   <span className="min-w-0 flex-1 font-medium text-slate-800">{group.location}</span>
