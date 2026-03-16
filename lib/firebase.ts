@@ -1,6 +1,6 @@
 "use client";
 
-import { getApp, getApps, initializeApp } from "firebase/app";
+import { getApp, getApps, initializeApp, type FirebaseApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage";
@@ -18,14 +18,33 @@ const missingEnvVars = Object.entries(firebaseConfig)
   .filter(([, value]) => !value)
   .map(([key]) => key);
 
-if (missingEnvVars.length > 0) {
-  throw new Error(
-    `Missing Firebase environment variables: ${missingEnvVars.join(", ")}`
-  );
+export const firebaseConfigError =
+  missingEnvVars.length > 0
+    ? `Missing Firebase environment variables: ${missingEnvVars.join(", ")}`
+    : null;
+
+let app: FirebaseApp | null = null;
+
+if (!firebaseConfigError) {
+  app = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
 }
 
-const app = getApps().length > 0 ? getApp() : initializeApp(firebaseConfig);
+function requireFirebaseApp() {
+  if (!app) {
+    throw new Error(firebaseConfigError ?? "Firebase app is not configured.");
+  }
 
-export const auth = getAuth(app);
-export const db = getFirestore(app);
-export const storage = getStorage(app);
+  return app;
+}
+
+export function getFirebaseAuth() {
+  return getAuth(requireFirebaseApp());
+}
+
+export function getFirebaseDb() {
+  return getFirestore(requireFirebaseApp());
+}
+
+export function getFirebaseStorage() {
+  return getStorage(requireFirebaseApp());
+}

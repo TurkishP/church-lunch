@@ -15,13 +15,33 @@ type CreateGroupModalProps = {
   isSubmitting: boolean;
   onClose: () => void;
   onSubmit: (values: CreateGroupValues) => Promise<void>;
+  copy: {
+    title: string;
+    groupName: string;
+    groupNamePlaceholder: string;
+    menu: string;
+    menuPlaceholder: string;
+    linkUrl: string;
+    linkUrlPlaceholder: string;
+    image: string;
+    imageHelp: string;
+    helper: string;
+    creating: string;
+    submit: string;
+  };
+  modalCopy: {
+    close: string;
+    closeBackdrop: string;
+  };
 };
 
 export default function CreateGroupModal({
   isOpen,
   isSubmitting,
   onClose,
-  onSubmit
+  onSubmit,
+  copy,
+  modalCopy
 }: CreateGroupModalProps) {
   const [name, setName] = useState("");
   const [menu, setMenu] = useState("");
@@ -55,46 +75,48 @@ export default function CreateGroupModal({
   }
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title="Create group">
+    <Modal
+      backdropLabel={modalCopy.closeBackdrop}
+      closeLabel={modalCopy.close}
+      isOpen={isOpen}
+      onClose={onClose}
+      title={copy.title}
+    >
       <form className="space-y-4" onSubmit={handleSubmit}>
         <label className="block space-y-2">
-          <span className="text-sm font-semibold text-slate-700">
-            Group name
-          </span>
+          <span className="text-sm font-semibold text-slate-700">{copy.groupName}</span>
           <input
             className="w-full rounded-2xl border border-pine/15 bg-white/90 px-4 py-3 outline-none transition focus:border-pine focus:ring-2 focus:ring-pine/15"
             onChange={(event) => setName(event.target.value)}
-            placeholder="Optional name"
+            placeholder={copy.groupNamePlaceholder}
             value={name}
           />
         </label>
 
         <label className="block space-y-2">
-          <span className="text-sm font-semibold text-slate-700">Menu</span>
+          <span className="text-sm font-semibold text-slate-700">{copy.menu}</span>
           <input
             className="w-full rounded-2xl border border-pine/15 bg-white/90 px-4 py-3 outline-none transition focus:border-pine focus:ring-2 focus:ring-pine/15"
             onChange={(event) => setMenu(event.target.value)}
-            placeholder="Required menu"
+            placeholder={copy.menuPlaceholder}
             required
             value={menu}
           />
         </label>
 
         <label className="block space-y-2">
-          <span className="text-sm font-semibold text-slate-700">
-            Link URL
-          </span>
+          <span className="text-sm font-semibold text-slate-700">{copy.linkUrl}</span>
           <input
             className="w-full rounded-2xl border border-pine/15 bg-white/90 px-4 py-3 outline-none transition focus:border-pine focus:ring-2 focus:ring-pine/15"
             onChange={(event) => setLinkUrl(event.target.value)}
-            placeholder="Optional restaurant link"
+            placeholder={copy.linkUrlPlaceholder}
             type="url"
             value={linkUrl}
           />
         </label>
 
         <label className="block space-y-2">
-          <span className="text-sm font-semibold text-slate-700">Image</span>
+          <span className="text-sm font-semibold text-slate-700">{copy.image}</span>
           <input
             accept="image/*"
             className="w-full rounded-2xl border border-dashed border-pine/20 bg-white/70 px-4 py-3 text-sm"
@@ -103,14 +125,11 @@ export default function CreateGroupModal({
             }}
             type="file"
           />
-          <span className="block text-xs text-slate-500">
-            Stored in Firebase Storage for the current session.
-          </span>
+          <span className="block text-xs text-slate-500">{copy.imageHelp}</span>
         </label>
 
         <div className="rounded-[1.4rem] bg-sand/70 px-4 py-3 text-sm leading-6 text-slate-600">
-          You automatically join the group after creating it. Creating a new
-          group also replaces your current group membership.
+          {copy.helper}
         </div>
 
         <button
@@ -118,7 +137,7 @@ export default function CreateGroupModal({
           disabled={isSubmitting || !menu.trim()}
           type="submit"
         >
-          {isSubmitting ? "Creating..." : "Create group"}
+          {isSubmitting ? copy.creating : copy.submit}
         </button>
       </form>
     </Modal>

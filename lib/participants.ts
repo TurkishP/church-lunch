@@ -8,7 +8,7 @@ import {
   serverTimestamp,
   setDoc
 } from "firebase/firestore";
-import { db } from "@/lib/firebase";
+import { getFirebaseDb } from "@/lib/firebase";
 
 export type Participant = {
   id: string;
@@ -22,7 +22,7 @@ export function subscribeParticipants(
   onError?: (message: string) => void
 ) {
   return onSnapshot(
-    collection(db, "sessions", sessionId, "participants"),
+    collection(getFirebaseDb(), "sessions", sessionId, "participants"),
     (snapshot) => {
       const nextParticipants: Record<string, Participant> = {};
 
@@ -48,6 +48,7 @@ export async function saveParticipantDisplayName(
   uid: string,
   displayName: string
 ) {
+  const db = getFirebaseDb();
   const participantRef = doc(db, "sessions", sessionId, "participants", uid);
   const existingParticipant = await getDoc(participantRef);
 

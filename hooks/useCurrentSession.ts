@@ -2,7 +2,7 @@
 
 import { doc, onSnapshot } from "firebase/firestore";
 import { useEffect, useState } from "react";
-import { db } from "@/lib/firebase";
+import { firebaseConfigError, getFirebaseDb } from "@/lib/firebase";
 
 type UseCurrentSessionResult = {
   sessionId: string | null;
@@ -16,7 +16,13 @@ export function useCurrentSession(): UseCurrentSessionResult {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const sessionRef = doc(db, "meta", "currentSession");
+    if (firebaseConfigError) {
+      setError(firebaseConfigError);
+      setLoading(false);
+      return;
+    }
+
+    const sessionRef = doc(getFirebaseDb(), "meta", "currentSession");
 
     const unsubscribe = onSnapshot(
       sessionRef,

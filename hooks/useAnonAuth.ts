@@ -2,7 +2,7 @@
 
 import { signInAnonymously, onAuthStateChanged, type User } from "firebase/auth";
 import { useEffect, useState } from "react";
-import { auth } from "@/lib/firebase";
+import { firebaseConfigError, getFirebaseAuth } from "@/lib/firebase";
 
 type UseAnonAuthResult = {
   user: User | null;
@@ -16,6 +16,13 @@ export function useAnonAuth(): UseAnonAuthResult {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    if (firebaseConfigError) {
+      setError(firebaseConfigError);
+      setLoading(false);
+      return;
+    }
+
+    const auth = getFirebaseAuth();
     const unsubscribe = onAuthStateChanged(
       auth,
       async (nextUser) => {

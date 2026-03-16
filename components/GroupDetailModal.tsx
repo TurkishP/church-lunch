@@ -24,6 +24,22 @@ type GroupDetailModalProps = {
   onClose: () => void;
   onJoin: (groupId: string) => Promise<void>;
   onLeave: () => Promise<void>;
+  copy: {
+    menuLabel: string;
+    createdBy: string;
+    members: string;
+    noMembers: string;
+    leaveGroup: string;
+    moveToGroup: string;
+    joinGroup: string;
+    leaveCurrentGroup: string;
+    working: string;
+    fallbackName: string;
+  };
+  modalCopy: {
+    close: string;
+    closeBackdrop: string;
+  };
 };
 
 function ExternalLinkIcon() {
@@ -51,7 +67,9 @@ export default function GroupDetailModal({
   isBusy,
   onClose,
   onJoin,
-  onLeave
+  onLeave,
+  copy,
+  modalCopy
 }: GroupDetailModalProps) {
   if (!group) {
     return null;
@@ -61,10 +79,10 @@ export default function GroupDetailModal({
   const isCurrentGroup = membershipGroupId === groupId;
   const hasMembership = Boolean(membershipGroupId);
   const primaryLabel = isCurrentGroup
-    ? "Leave group"
+    ? copy.leaveGroup
     : hasMembership
-      ? "Move to group"
-      : "Join group";
+      ? copy.moveToGroup
+      : copy.joinGroup;
 
   async function handlePrimaryAction() {
     if (isCurrentGroup) {
@@ -76,15 +94,21 @@ export default function GroupDetailModal({
   }
 
   return (
-    <Modal isOpen={Boolean(group)} onClose={onClose} title={group.name || "Lunch Group"}>
+    <Modal
+      backdropLabel={modalCopy.closeBackdrop}
+      closeLabel={modalCopy.close}
+      isOpen={Boolean(group)}
+      onClose={onClose}
+      title={group.name || copy.fallbackName}
+    >
       <div className="space-y-5">
         <div className="rounded-[1.5rem] bg-gradient-to-br from-pine to-moss p-5 text-white">
           <p className="text-sm uppercase tracking-[0.22em] text-white/75">
-            Today&apos;s Menu
+            {copy.menuLabel}
           </p>
           <p className="mt-2 text-2xl font-semibold">{group.menu}</p>
           <p className="mt-3 text-sm text-white/80">
-            Created by {group.creatorName}
+            {copy.createdBy} {group.creatorName}
           </p>
         </div>
 
@@ -102,7 +126,7 @@ export default function GroupDetailModal({
 
         {group.imageUrl ? (
           <img
-            alt={group.name || "Group preview"}
+            alt={group.name || copy.fallbackName}
             className="h-56 w-full rounded-[1.5rem] object-cover"
             src={group.imageUrl}
           />
@@ -111,7 +135,7 @@ export default function GroupDetailModal({
         <div className="rounded-[1.5rem] bg-white/75 p-4">
           <div className="flex items-center justify-between">
             <p className="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">
-              Members
+              {copy.members}
             </p>
             <p className="rounded-full bg-pine/10 px-3 py-1 text-sm font-semibold text-pine">
               {group.members.length}
@@ -120,7 +144,7 @@ export default function GroupDetailModal({
 
           <div className="mt-4 space-y-2">
             {group.members.length === 0 ? (
-              <p className="text-sm text-slate-600">No one has joined yet.</p>
+              <p className="text-sm text-slate-600">{copy.noMembers}</p>
             ) : (
               group.members.map((member) => (
                 <div
@@ -143,7 +167,7 @@ export default function GroupDetailModal({
             onClick={handlePrimaryAction}
             type="button"
           >
-            {isBusy ? "Working..." : primaryLabel}
+            {isBusy ? copy.working : primaryLabel}
           </button>
 
           {!isCurrentGroup && membershipGroupId ? (
@@ -153,7 +177,7 @@ export default function GroupDetailModal({
               onClick={onLeave}
               type="button"
             >
-              Leave current group
+              {copy.leaveCurrentGroup}
             </button>
           ) : null}
         </div>

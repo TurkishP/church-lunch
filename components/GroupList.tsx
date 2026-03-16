@@ -14,6 +14,15 @@ export type GroupListItem = {
 type GroupListProps = {
   groups: GroupListItem[];
   onSelect: (groupId: string) => void;
+  copy: {
+    emptyTitle: string;
+    emptyDescription: string;
+    fallbackName: string;
+    myGroup: string;
+    createdBy: string;
+    link: string;
+    photo: string;
+  };
 };
 
 function LinkIcon() {
@@ -53,16 +62,12 @@ function ImageIcon() {
   );
 }
 
-export default function GroupList({ groups, onSelect }: GroupListProps) {
+export default function GroupList({ groups, onSelect, copy }: GroupListProps) {
   if (groups.length === 0) {
     return (
       <div className="panel rounded-[1.75rem] p-6 text-center">
-        <p className="display-font text-2xl font-semibold text-pine">
-          No groups yet
-        </p>
-        <p className="mt-2 text-sm leading-6 text-slate-600">
-          Start the first lunch group for this Sunday.
-        </p>
+        <p className="display-font text-2xl font-semibold text-pine">{copy.emptyTitle}</p>
+        <p className="mt-2 text-sm leading-6 text-slate-600">{copy.emptyDescription}</p>
       </div>
     );
   }
@@ -80,11 +85,11 @@ export default function GroupList({ groups, onSelect }: GroupListProps) {
             <div className="min-w-0">
               <div className="flex flex-wrap items-center gap-2">
                 <h3 className="display-font truncate text-2xl font-semibold text-ink">
-                  {group.name || "Lunch Group"}
+                  {group.name || copy.fallbackName}
                 </h3>
                 {group.isJoined ? (
                   <span className="rounded-full bg-pine/10 px-2.5 py-1 text-xs font-semibold text-pine">
-                    My group
+                    {copy.myGroup}
                   </span>
                 ) : null}
               </div>
@@ -93,7 +98,7 @@ export default function GroupList({ groups, onSelect }: GroupListProps) {
                 {group.menu}
               </p>
               <p className="mt-2 text-sm text-slate-600">
-                Created by {group.creatorName}
+                {copy.createdBy} {group.creatorName}
               </p>
             </div>
 
@@ -106,13 +111,13 @@ export default function GroupList({ groups, onSelect }: GroupListProps) {
             {group.hasLink ? (
               <span className="inline-flex items-center gap-1 rounded-full bg-white/80 px-2.5 py-1">
                 <LinkIcon />
-                Link
+                {copy.link}
               </span>
             ) : null}
             {group.hasImage ? (
               <span className="inline-flex items-center gap-1 rounded-full bg-white/80 px-2.5 py-1">
                 <ImageIcon />
-                Photo
+                {copy.photo}
               </span>
             ) : null}
           </div>

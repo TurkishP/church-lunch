@@ -8,6 +8,8 @@ type ModalProps = {
   children: ReactNode;
   onClose: () => void;
   dismissible?: boolean;
+  closeLabel?: string;
+  backdropLabel?: string;
 };
 
 export default function Modal({
@@ -15,7 +17,9 @@ export default function Modal({
   title,
   children,
   onClose,
-  dismissible = true
+  dismissible = true,
+  closeLabel = "Close",
+  backdropLabel = "Close modal backdrop"
 }: ModalProps) {
   useEffect(() => {
     if (!isOpen) {
@@ -41,7 +45,7 @@ export default function Modal({
   return (
     <div className="fixed inset-0 z-50 flex items-end justify-center bg-slate-950/50 px-4 pb-4 pt-16 backdrop-blur-sm sm:items-center">
       <button
-        aria-label="Close modal backdrop"
+        aria-label={backdropLabel}
         className="absolute inset-0"
         disabled={!dismissible}
         onClick={dismissible ? onClose : undefined}
@@ -60,7 +64,7 @@ export default function Modal({
               onClick={onClose}
               type="button"
             >
-              Close
+              {closeLabel}
             </button>
           ) : null}
         </div>

@@ -8,13 +8,27 @@ type NameGateProps = {
   initialValue?: string;
   isSaving: boolean;
   onSubmit: (displayName: string) => Promise<void>;
+  copy: {
+    title: string;
+    description: string;
+    label: string;
+    placeholder: string;
+    saving: string;
+    continue: string;
+  };
+  modalCopy: {
+    close: string;
+    closeBackdrop: string;
+  };
 };
 
 export default function NameGate({
   isOpen,
   initialValue = "",
   isSaving,
-  onSubmit
+  onSubmit,
+  copy,
+  modalCopy
 }: NameGateProps) {
   const [displayName, setDisplayName] = useState(initialValue);
 
@@ -33,23 +47,25 @@ export default function NameGate({
   }
 
   return (
-    <Modal dismissible={false} isOpen={isOpen} onClose={() => {}} title="Your name">
+    <Modal
+      backdropLabel={modalCopy.closeBackdrop}
+      closeLabel={modalCopy.close}
+      dismissible={false}
+      isOpen={isOpen}
+      onClose={() => {}}
+      title={copy.title}
+    >
       <form className="space-y-4" onSubmit={handleSubmit}>
-        <p className="text-sm leading-6 text-slate-600">
-          Enter the name you want everyone to see in this week&apos;s lunch
-          groups.
-        </p>
+        <p className="text-sm leading-6 text-slate-600">{copy.description}</p>
 
         <label className="block space-y-2">
-          <span className="text-sm font-semibold text-slate-700">
-            Display name
-          </span>
+          <span className="text-sm font-semibold text-slate-700">{copy.label}</span>
           <input
             autoFocus
             className="w-full rounded-2xl border border-pine/15 bg-white/90 px-4 py-3 text-base outline-none transition focus:border-pine focus:ring-2 focus:ring-pine/15"
             maxLength={40}
             onChange={(event) => setDisplayName(event.target.value)}
-            placeholder="e.g. Grace Kim"
+            placeholder={copy.placeholder}
             value={displayName}
           />
         </label>
@@ -59,7 +75,7 @@ export default function NameGate({
           disabled={isSaving || !displayName.trim()}
           type="submit"
         >
-          {isSaving ? "Saving..." : "Continue"}
+          {isSaving ? copy.saving : copy.continue}
         </button>
       </form>
     </Modal>

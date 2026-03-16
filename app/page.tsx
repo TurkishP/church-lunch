@@ -8,6 +8,8 @@ import NameGate from "@/components/NameGate";
 import ShareQrModal from "@/components/ShareQrModal";
 import { useAnonAuth } from "@/hooks/useAnonAuth";
 import { useCurrentSession } from "@/hooks/useCurrentSession";
+import { useLanguage } from "@/hooks/useLanguage";
+import { getCopy } from "@/lib/i18n";
 import {
   createGroup,
   subscribeGroups,
@@ -86,7 +88,29 @@ function ShareIcon() {
   );
 }
 
+function GlobeIcon() {
+  return (
+    <svg
+      aria-hidden="true"
+      className="h-5 w-5"
+      fill="none"
+      stroke="currentColor"
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      strokeWidth="2"
+      viewBox="0 0 24 24"
+    >
+      <circle cx="12" cy="12" r="9" />
+      <path d="M3 12h18" />
+      <path d="M12 3a15 15 0 0 1 0 18" />
+      <path d="M12 3a15 15 0 0 0 0 18" />
+    </svg>
+  );
+}
+
 export default function HomePage() {
+  const { language, setLanguage } = useLanguage("ko");
+  const copy = getCopy(language);
   const { user, loading: authLoading, error: authError } = useAnonAuth();
   const {
     sessionId,
@@ -305,9 +329,9 @@ export default function HomePage() {
       <main className="app-shell flex min-h-screen items-center justify-center px-6">
         <div className="panel rounded-[2rem] px-6 py-8 text-center">
           <p className="display-font text-3xl font-semibold text-pine">
-            Sunday Lunch Groups
+            {copy.loadingTitle}
           </p>
-          <p className="mt-3 text-sm text-slate-600">Loading live updates...</p>
+          <p className="mt-3 text-sm text-slate-600">{copy.loadingSubtitle}</p>
         </div>
       </main>
     );
@@ -320,47 +344,62 @@ export default function HomePage() {
           <div className="flex items-start justify-between gap-4">
             <div>
               <p className="text-xs font-semibold uppercase tracking-[0.24em] text-pine/75">
-                Church Community
+                {copy.communityLabel}
               </p>
               <h1 className="display-font mt-2 text-4xl font-semibold leading-none text-pine">
-                Sunday Lunch Groups
+                {copy.appTitle}
               </h1>
             </div>
 
-            <button
-              className="inline-flex min-h-12 items-center gap-2 rounded-2xl border border-pine/15 bg-white/80 px-4 py-3 text-sm font-semibold text-pine transition hover:bg-pine/5"
-              onClick={() => setShareOpen(true)}
-              type="button"
-            >
-              <ShareIcon />
-              Share
-            </button>
+            <div className="flex items-center gap-2">
+              <button
+                aria-label={copy.languageToggle}
+                className="inline-flex min-h-12 items-center gap-2 rounded-2xl border border-pine/15 bg-white/80 px-3 py-3 text-sm font-semibold text-pine transition hover:bg-pine/5"
+                onClick={() =>
+                  setLanguage((currentLanguage) =>
+                    currentLanguage === "ko" ? "en" : "ko"
+                  )
+                }
+                type="button"
+              >
+                <GlobeIcon />
+                {language.toUpperCase()}
+              </button>
+              <button
+                className="inline-flex min-h-12 items-center gap-2 rounded-2xl border border-pine/15 bg-white/80 px-4 py-3 text-sm font-semibold text-pine transition hover:bg-pine/5"
+                onClick={() => setShareOpen(true)}
+                type="button"
+              >
+                <ShareIcon />
+                {copy.share}
+              </button>
+            </div>
           </div>
 
           <div className="mt-5 grid grid-cols-1 gap-3 sm:grid-cols-2">
             <div className="rounded-[1.5rem] bg-white/80 px-4 py-4">
               <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
-                Your name
+                {copy.yourName}
               </p>
               <p className="mt-2 text-lg font-semibold text-slate-800">
-                {currentParticipant?.displayName || "Set your display name"}
+                {currentParticipant?.displayName || copy.setDisplayName}
               </p>
             </div>
 
             <div className="rounded-[1.5rem] bg-white/80 px-4 py-4">
               <p className="text-xs font-semibold uppercase tracking-[0.2em] text-slate-500">
-                Current session
+                {copy.currentSession}
               </p>
               <p className="mt-2 text-lg font-semibold text-slate-800">
-                {sessionId ?? "Not configured"}
+                {sessionId ?? copy.notConfigured}
               </p>
             </div>
           </div>
 
           <div className="mt-4 rounded-[1.5rem] bg-gradient-to-r from-ember/15 to-moss/15 px-4 py-4 text-sm text-slate-700">
             {membershipGroupId
-              ? "You are already in a lunch group. Tap any card to view details or switch."
-              : "You are not in a group yet. Create one or join an existing group."}
+              ? copy.joinedHint
+              : copy.noMembershipHint}
           </div>
         </section>
 
@@ -369,21 +408,21 @@ export default function HomePage() {
             {authError ||
               sessionError ||
               actionError ||
-              "No active session found in meta/currentSession."}
+              copy.noActiveSession}
           </section>
         ) : null}
 
         <section className="space-y-3">
           <div className="flex items-center justify-between px-1">
             <h2 className="display-font text-2xl font-semibold text-ink">
-              Open groups
+              {copy.openGroups}
             </h2>
             <span className="rounded-full bg-white/75 px-3 py-1 text-sm font-semibold text-pine">
               {detailedGroups.length}
             </span>
           </div>
 
-          <GroupList groups={groupListItems} onSelect={setSelectedGroupId} />
+          <GroupList copy={copy.groupList} groups={groupListItems} onSelect={setSelectedGroupId} />
         </section>
       </div>
 
@@ -395,35 +434,41 @@ export default function HomePage() {
             type="button"
           >
             <QrIcon />
-            QR
+            {copy.qr}
           </button>
           <button
             className="inline-flex min-h-14 items-center justify-center gap-2 rounded-[1.35rem] bg-ember px-4 py-4 text-base font-semibold text-white transition hover:bg-ember/90 disabled:cursor-not-allowed disabled:bg-ember/50"
             disabled={!canCreateGroup}
+            title={!canCreateGroup ? copy.createGroupDisabled : undefined}
             onClick={() => setCreateOpen(true)}
             type="button"
           >
             <PlusIcon />
-            Create group
+            {copy.createGroup}
           </button>
         </div>
       </div>
 
       <NameGate
+        copy={copy.nameGate}
         initialValue={currentParticipant?.displayName ?? ""}
         isOpen={Boolean(user && sessionId && !currentParticipant?.displayName)}
         isSaving={pendingAction === "save-name"}
+        modalCopy={copy.modal}
         onSubmit={handleSaveDisplayName}
       />
 
       <CreateGroupModal
+        copy={copy.createModal}
         isOpen={createOpen}
         isSubmitting={pendingAction === "create-group"}
+        modalCopy={copy.modal}
         onClose={() => setCreateOpen(false)}
         onSubmit={handleCreateGroup}
       />
 
       <GroupDetailModal
+        copy={{ ...copy.detailModal, fallbackName: copy.groupList.fallbackName }}
         group={
           selectedGroup
             ? {
@@ -439,12 +484,18 @@ export default function HomePage() {
         }
         isBusy={pendingAction === "join-group" || pendingAction === "leave-group"}
         membershipGroupId={membershipGroupId}
+        modalCopy={copy.modal}
         onClose={() => setSelectedGroupId(null)}
         onJoin={handleJoinGroup}
         onLeave={handleLeaveGroup}
       />
 
-      <ShareQrModal isOpen={shareOpen} onClose={() => setShareOpen(false)} />
+      <ShareQrModal
+        copy={copy.shareModal}
+        isOpen={shareOpen}
+        modalCopy={copy.modal}
+        onClose={() => setShareOpen(false)}
+      />
     </main>
   );
 }

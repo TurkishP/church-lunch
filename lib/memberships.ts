@@ -8,7 +8,7 @@ import {
   serverTimestamp,
   setDoc
 } from "firebase/firestore";
-import { db } from "@/lib/firebase";
+import { getFirebaseDb } from "@/lib/firebase";
 
 export type Membership = {
   participantId: string;
@@ -22,7 +22,7 @@ export function subscribeMemberships(
   onError?: (message: string) => void
 ) {
   return onSnapshot(
-    collection(db, "sessions", sessionId, "memberships"),
+    collection(getFirebaseDb(), "sessions", sessionId, "memberships"),
     (snapshot) => {
       const nextMemberships: Record<string, Membership> = {};
 
@@ -48,6 +48,7 @@ export async function upsertMembership(
   uid: string,
   groupId: string
 ) {
+  const db = getFirebaseDb();
   await setDoc(doc(db, "sessions", sessionId, "memberships", uid), {
     participantId: uid,
     groupId,
@@ -56,5 +57,5 @@ export async function upsertMembership(
 }
 
 export async function leaveGroup(sessionId: string, uid: string) {
-  await deleteDoc(doc(db, "sessions", sessionId, "memberships", uid));
+  await deleteDoc(doc(getFirebaseDb(), "sessions", sessionId, "memberships", uid));
 }

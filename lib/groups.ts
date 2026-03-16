@@ -12,7 +12,7 @@ import {
   ref as storageRef,
   uploadBytes
 } from "firebase/storage";
-import { db, storage } from "@/lib/firebase";
+import { getFirebaseDb, getFirebaseStorage } from "@/lib/firebase";
 
 export type LunchGroup = {
   id: string;
@@ -44,7 +44,7 @@ export function subscribeGroups(
   onError?: (message: string) => void
 ) {
   return onSnapshot(
-    collection(db, "sessions", sessionId, "groups"),
+    collection(getFirebaseDb(), "sessions", sessionId, "groups"),
     (snapshot) => {
       const nextGroups: Record<string, LunchGroup> = {};
 
@@ -78,6 +78,8 @@ export async function createGroup({
   linkUrl,
   imageFile
 }: CreateGroupInput) {
+  const db = getFirebaseDb();
+  const storage = getFirebaseStorage();
   const groupRef = doc(collection(db, "sessions", sessionId, "groups"));
   let imageUrl = "";
 
