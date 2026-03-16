@@ -515,18 +515,6 @@ export default function HomePage() {
           </section>
         ) : null}
 
-        <SessionCalendar
-          activeSessionId={currentSessionId}
-          copy={copy.sessionBrowser}
-          formatSessionDate={(sessionId) => formatSessionId(sessionId, language)}
-          formatShortSessionDate={formatShortSessionId}
-          monthValue={selectedMonth}
-          onMonthChange={handleMonthChange}
-          onSessionSelect={setSelectedSessionId}
-          selectedSessionId={viewedSessionId}
-          sessionIds={sessionIdsForMonth}
-        />
-
         <section className="space-y-3">
           <div className="px-1">
             <h2 className="display-font text-2xl font-semibold text-ink">
@@ -542,6 +530,18 @@ export default function HomePage() {
             onSelect={setSelectedGroupId}
           />
         </section>
+
+        <SessionCalendar
+          activeSessionId={currentSessionId}
+          copy={copy.sessionBrowser}
+          formatSessionDate={(sessionId) => formatSessionId(sessionId, language)}
+          formatShortSessionDate={formatShortSessionId}
+          monthValue={selectedMonth}
+          onMonthChange={handleMonthChange}
+          onSessionSelect={setSelectedSessionId}
+          selectedSessionId={viewedSessionId}
+          sessionIds={sessionIdsForMonth}
+        />
       </div>
 
       <div className="fixed inset-x-0 bottom-0 z-40 px-4 pb-4">

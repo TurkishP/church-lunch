@@ -100,7 +100,11 @@ export default function GroupList({
     <div className="space-y-3">
       {groups.map((group) => (
         <div
-          className="panel w-full rounded-[1.75rem] p-4 transition hover:-translate-y-0.5 hover:bg-white/90"
+          className={`w-full rounded-[1.75rem] p-4 transition hover:-translate-y-0.5 ${
+            group.isJoined
+              ? "panel-strong border-pine/25 bg-gradient-to-br from-pine/10 via-white/92 to-moss/10 hover:bg-white/95"
+              : "panel hover:bg-white/90"
+          }`}
           key={group.id}
         >
           <div className="flex items-start justify-between gap-3">
