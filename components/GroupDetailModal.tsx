@@ -100,8 +100,8 @@ export default function GroupDetailModal({
   const groupId = group.id;
   const groupLocation = group.location;
   const isKoreanLabels = /[가-힣]/.test(copy.menuLabel) || /[가-힣]/.test(copy.locationLabel);
-  const detailLabelWidthClass = isKoreanLabels ? "w-16" : "w-24";
-  const detailRowGapClass = isKoreanLabels ? "gap-2" : "gap-3";
+  const detailLabelWidthClass = isKoreanLabels ? "w-10" : "w-24";
+  const detailRowGapClass = isKoreanLabels ? "gap-1" : "gap-3";
   const isCurrentGroup = membershipGroupId === groupId;
   const hasMembership = Boolean(membershipGroupId);
   const primaryLabel = isCurrentGroup

@@ -78,8 +78,8 @@ export default function GroupList({
   copy
 }: GroupListProps) {
   const isKoreanLabels = /[가-힣]/.test(copy.menu) || /[가-힣]/.test(copy.location);
-  const labelWidthClass = isKoreanLabels ? "w-16" : "w-24";
-  const rowGapClass = isKoreanLabels ? "gap-2" : "gap-3";
+  const labelWidthClass = isKoreanLabels ? "w-10" : "w-24";
+  const rowGapClass = isKoreanLabels ? "gap-1" : "gap-3";
 
   function formatMemberCount(memberCount: number) {
     if (copy.memberCountPrefix) {
