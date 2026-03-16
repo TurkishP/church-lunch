@@ -121,6 +121,8 @@ function GlobeIcon() {
 export default function HomePage() {
   const { language, setLanguage } = useLanguage("ko");
   const copy = getCopy(language);
+  const locationFallback =
+    language === "ko" ? "만든 사람에게 문의" : "Contact creator";
   const { user, loading: authLoading, error: authError } = useAnonAuth();
   const {
     sessionId: currentSessionId,
@@ -277,7 +279,7 @@ export default function HomePage() {
     id: group.id,
     name: group.name,
     menu: group.menu,
-    location: group.location,
+    location: group.location || locationFallback,
     creatorName: group.creatorName,
     memberCount: group.memberCount,
     hasLink: Boolean(group.linkUrl),
@@ -628,6 +630,7 @@ export default function HomePage() {
               }
             : null
         }
+        locationFallback={locationFallback}
         isBusy={
           pendingAction === "join-group" ||
           pendingAction === "leave-group" ||
