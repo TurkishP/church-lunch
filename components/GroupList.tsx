@@ -104,7 +104,7 @@ export default function GroupList({
         <div
           className={`w-full rounded-[1.75rem] p-4 transition hover:-translate-y-0.5 ${
             group.isJoined
-              ? "panel-strong border-red-200 bg-gradient-to-br from-red-100/75 via-white/95 to-amber-100/70 hover:bg-white/95"
+              ? "panel-strong border-rose-300 bg-gradient-to-br from-rose-200/85 via-orange-50 to-amber-100/80 shadow-[0_18px_60px_rgba(190,24,93,0.14)] hover:bg-white/95"
               : "panel hover:bg-white/90"
           }`}
           key={group.id}
@@ -120,14 +120,14 @@ export default function GroupList({
               </h3>
 
               <p className="mt-2 flex items-baseline gap-2 text-base">
-                <span className="text-sm font-semibold uppercase tracking-[0.16em] text-slate-500">
+                <span className="inline-block w-20 shrink-0 text-sm font-semibold uppercase tracking-[0.16em] text-slate-500">
                   {copy.menu}
                 </span>
                 <span className="font-medium text-slate-800">{group.menu}</span>
               </p>
               {group.location ? (
                 <p className="mt-1 flex items-baseline gap-2 text-base">
-                  <span className="text-sm font-semibold uppercase tracking-[0.16em] text-slate-500">
+                  <span className="inline-block w-20 shrink-0 text-sm font-semibold uppercase tracking-[0.16em] text-slate-500">
                     {copy.location}
                   </span>
                   <span className="font-medium text-slate-800">{group.location}</span>
