@@ -37,7 +37,8 @@ export const appCopy = {
       label: "표시 이름",
       placeholder: "예: 김은혜",
       saving: "저장 중...",
-      continue: "계속"
+      continue: "계속",
+      edit: "이름 변경"
     },
     createModal: {
       title: "모임 만들기",
@@ -124,7 +125,8 @@ export const appCopy = {
       label: "Display name",
       placeholder: "e.g. Grace Kim",
       saving: "Saving...",
-      continue: "Continue"
+      continue: "Continue",
+      edit: "Change name"
     },
     createModal: {
       title: "Create group",

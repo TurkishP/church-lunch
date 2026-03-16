@@ -137,6 +137,7 @@ export default function HomePage() {
   const [selectedGroupId, setSelectedGroupId] = useState<string | null>(null);
   const [selectedSessionId, setSelectedSessionId] = useState<string | null>(null);
   const [selectedMonth, setSelectedMonth] = useState(getTodayMonthValue());
+  const [nameEditorOpen, setNameEditorOpen] = useState(false);
   const [createOpen, setCreateOpen] = useState(false);
   const [shareOpen, setShareOpen] = useState(false);
   const [pendingAction, setPendingAction] = useState<string | null>(null);
@@ -223,6 +224,13 @@ export default function HomePage() {
   const currentParticipant = user ? participants[user.uid] ?? null : null;
   const currentMembership = user ? memberships[user.uid] ?? null : null;
   const membershipGroupId = currentMembership?.groupId ?? null;
+  const isNameRequired = Boolean(
+    user &&
+      currentSessionId &&
+      isViewingCurrentSession &&
+      !currentParticipant?.displayName
+  );
+  const isNameModalOpen = isNameRequired || nameEditorOpen;
 
   const detailedGroups: DetailedGroup[] = Object.values(groups)
     .filter((group) => group.status !== "archived")
@@ -317,6 +325,7 @@ export default function HomePage() {
 
     await runAction("save-name", async () => {
       await saveParticipantDisplayName(currentSessionId, user.uid, displayName);
+      setNameEditorOpen(false);
     });
   }
 
@@ -432,6 +441,15 @@ export default function HomePage() {
               <p className="mt-2 text-lg font-semibold text-slate-800">
                 {currentParticipant?.displayName || copy.setDisplayName}
               </p>
+              {currentSessionId && isViewingCurrentSession ? (
+                <button
+                  className="mt-3 inline-flex rounded-full border border-pine/15 bg-white px-3 py-2 text-sm font-semibold text-pine transition hover:bg-pine/5"
+                  onClick={() => setNameEditorOpen(true)}
+                  type="button"
+                >
+                  {copy.nameGate.edit}
+                </button>
+              ) : null}
             </div>
 
             <div className="rounded-[1.5rem] bg-white/80 px-4 py-4">
@@ -516,14 +534,11 @@ export default function HomePage() {
       <NameGate
         copy={copy.nameGate}
         initialValue={currentParticipant?.displayName ?? ""}
-        isOpen={Boolean(
-          user &&
-            currentSessionId &&
-            isViewingCurrentSession &&
-            !currentParticipant?.displayName
-        )}
+        dismissible={!isNameRequired}
+        isOpen={isNameModalOpen}
         isSaving={pendingAction === "save-name"}
         modalCopy={copy.modal}
+        onClose={() => setNameEditorOpen(false)}
         onSubmit={handleSaveDisplayName}
       />
 

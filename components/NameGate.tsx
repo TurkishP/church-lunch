@@ -8,6 +8,8 @@ type NameGateProps = {
   initialValue?: string;
   isSaving: boolean;
   onSubmit: (displayName: string) => Promise<void>;
+  onClose: () => void;
+  dismissible?: boolean;
   copy: {
     title: string;
     description: string;
@@ -27,6 +29,8 @@ export default function NameGate({
   initialValue = "",
   isSaving,
   onSubmit,
+  onClose,
+  dismissible = false,
   copy,
   modalCopy
 }: NameGateProps) {
@@ -50,9 +54,9 @@ export default function NameGate({
     <Modal
       backdropLabel={modalCopy.closeBackdrop}
       closeLabel={modalCopy.close}
-      dismissible={false}
+      dismissible={dismissible}
       isOpen={isOpen}
-      onClose={() => {}}
+      onClose={onClose}
       title={copy.title}
     >
       <form className="space-y-4" onSubmit={handleSubmit}>
