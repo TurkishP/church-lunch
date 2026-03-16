@@ -4,11 +4,13 @@ import type { ReactNode } from "react";
 import "./globals.css";
 
 const notoSansKr = Noto_Sans_KR({
+  preload: false,
   variable: "--font-body-ko",
   weight: ["400", "500", "600", "700"]
 });
 
 const notoSerifKr = Noto_Serif_KR({
+  preload: false,
   variable: "--font-display-ko",
   weight: ["400", "500", "600", "700"]
 });
